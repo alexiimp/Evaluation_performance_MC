@@ -40,17 +40,6 @@ public class MasterSocket {
 
        //create worker's socket
        for(int i = 0 ; i < numWorkers ; i++) {
-           int finalI = i;
-           new Thread(() -> {
-               try {
-                   String[] p = {String.valueOf(tab_port[finalI])};
-                   // Appel direct de la méthode main de l'autre classe
-                   WorkerSocket.main(p);
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
-           }).start();
-           Thread.sleep(1000);
 	   sockets[i] = new Socket(ip, tab_port[i]);
 	   System.out.println("SOCKET = " + sockets[i]);
 	   
@@ -59,6 +48,7 @@ public class MasterSocket {
        }
 
        String message_to_send;
+       totalCount = totalCount/numWorkers;
        message_to_send = String.valueOf(totalCount);
 
        String message_repeat = "y";
@@ -78,7 +68,7 @@ public class MasterSocket {
 	       tab_total_workers[i] = reader[i].readLine();      // read message from server
 	       System.out.println("Client sent: " + tab_total_workers[i]);
 	   }
-	   
+	   total = 0;
 	   // compute PI with the result of each workers
 	   for(int i = 0 ; i < numWorkers ; i++) {
 	       total += Integer.parseInt(tab_total_workers[i]);
