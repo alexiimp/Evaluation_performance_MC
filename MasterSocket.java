@@ -51,6 +51,17 @@ public class MasterSocket {
 
        //create worker's socket
        for(int i = 0 ; i < numWorkers ; i++) {
+           int finalI = i;
+           new Thread(() -> {
+               try {
+                   String[] p = {String.valueOf(tab_port[finalI])};
+                   // Appel direct de la méthode main de l'autre classe
+                   WorkerSocket.main(p);
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+           }).start();
+           Thread.sleep(1000);
 	   sockets[i] = new Socket(ip, tab_port[i]);
 	   System.out.println("SOCKET = " + sockets[i]);
 	   
